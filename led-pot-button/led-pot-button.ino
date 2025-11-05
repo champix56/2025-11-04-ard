@@ -4,8 +4,10 @@
 #define PIN_BUTTON 2
 #define PIN_POT A0
 int valeurDuPotentiometre;
-
-
+volatile bool isClicked=false;
+void onButtonClicked(){
+  isClicked=true;
+}
 
 void setup() {
   // put your setup code here, to run once:
@@ -13,15 +15,15 @@ void setup() {
   pinMode(PIN_ORANGE, OUTPUT);
   pinMode(PIN_RED, OUTPUT);
   pinMode(PIN_BUTTON, INPUT);
+  attachInterrupt(digitalPinToInterrupt(PIN_BUTTON), onButtonClicked, RISING);
   valeurDuPotentiometre = map(analogRead(PIN_POT), 0, 1023, 0, 255);
   analogWrite(PIN_GREEN, valeurDuPotentiometre);
 }
 
 void loop() {
-  int buttonValue = digitalRead(11);
-  if (buttonValue == HIGH) {
+  if (isClicked == true) {
     sequencePieton(800);
-    sequencePieton(800);
+    isClicked=false;
   } else {
     delay(1000);
   }
