@@ -19,42 +19,43 @@ OneWire oneWire(ONE_WIRE_BUS);
 DallasTemperature sensors(&oneWire);
 
 LiquidCrystal_I2C lcd(0x27, 16, 2);  // set the LCD address to 0x27 for a 16 chars and 2 line display
-uint8_t CHAR_DEG[8]={
+uint8_t CHAR_DEG[8] = {
   B11100,
   B10100,
   B11100,
-  0x0,0x0,0x0,0X0};
+  0x0, 0x0, 0x0, 0X0
+};
 void setup() {
   lcd.init();  // initialize the lcd
-  lcd.createChar(0,CHAR_DEG);
+  lcd.createChar(0, CHAR_DEG);
   // Print a message to the LCD.
   lcd.backlight();
   lcd.setCursor(3, 0);
   lcd.print("Demat breizh");
-  delay(3000);    
+  delay(3000);
   lcd.clear();
-  lcd.setCursor(14,1);
+  lcd.setCursor(14, 1);
   lcd.print('C');
-    sensors.begin();
-  
+  sensors.begin();
 }
 void loop() {
-   tmElements_t tm;
+  tmElements_t tm;
 
   if (RTC.read(tm)) {
-    lcd.setCursor(4,0);
-    lcd.print(tm.Hour);    lcd.print(':');    lcd.print(tm.Minute);    lcd.print(':');    lcd.print(tm.Second);
+    char buff[9]="";
+    lcd.setCursor(4, 0);
+    sprintf(buff,"%02d:%02d:%02d",tm.Hour,tm.Minute,tm.Second);
+    lcd.print(buff);
   }
- sensors.requestTemperatures(); // Send the command to get temperatures
- float tempC = sensors.getTempCByIndex(0);
+  sensors.requestTemperatures();  // Send the command to get temperatures
+  float tempC = sensors.getTempCByIndex(0);
 
   // Check if reading was successful
-  if (tempC != DEVICE_DISCONNECTED_C)
-  {
-        lcd.setCursor(9,1);
-        lcd.print("     "); 
-        lcd.setCursor(9,1);
-        lcd.print(tempC);
+  if (tempC != DEVICE_DISCONNECTED_C) {
+    lcd.setCursor(9, 1);
+    lcd.print("     ");
+    lcd.setCursor(9, 1);
+    lcd.print(tempC);
   }
   delay(500);
 }
