@@ -1,24 +1,28 @@
 #include "config.h"
 #ifdef _ACCEL_MPU6050
+#include <Arduino.h>
+#include <TinyMPU6050.h>
 
-#include <Adafruit_MPU6050.h>
-#include <Adafruit_Sensor.h>
-#include <Wire.h>
+/*
+ *  Constructing MPU-6050
+ */
+MPU6050 mpu (Wire);
 
-Adafruit_MPU6050 mpu;
 void accelSetup() {
-  mpu.begin();
-  mpu.setAccelerometerRange(MPU6050_RANGE_8_G);
-  mpu.setGyroRange(MPU6050_RANGE_500_DEG);
-  mpu.setFilterBandwidth(MPU6050_BAND_21_HZ);
+    mpu.Initialize();
+    mpu.Calibrate();
+
 }
 void accelLoop() {
-  /* Get new sensor events with the readings */
-  sensors_event_t a, g, temp;
-  mpu.getEvent(&a, &g, &temp);
-  datas.accel.x = a.acceleration.x;
-  datas.accel.y = a.acceleration.y;
-  datas.accel.z = a.acceleration.z;
+    mpu.Execute();
+
+  datas.accel.x =mpu.GetAccX();
+  datas.accel.y = mpu.GetAccY();
+  datas.accel.z = mpu.GetAccZ();
+
+  datas.angle.x=mpu.GetAngX();
+  datas.angle.y=mpu.GetAngY();
+  datas.angle.z=mpu.GetAngZ();
 }
 
 #endif
