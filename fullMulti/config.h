@@ -4,8 +4,8 @@
 //composants actifs 
   #define _TEMP_DS18B20
   #define _RTC_DS1307
-  //#define _ACCEL_MPU6050
-  #define _ACCEL_ADXL345
+  #define _ACCEL_MPU6050
+  //#define _ACCEL_ADXL345
   //#define _SCREEN_ST7735
   #define _SCREEN_LCD1602_I2C
 //configuration des composant
@@ -42,6 +42,7 @@
     #endif
     #ifdef _ACCEL
       struct S_float3D accel;
+      struct S_float3D angle;
     #endif
     #ifdef _TIME
       tmElements_t tm;
